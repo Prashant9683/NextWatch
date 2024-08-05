@@ -17,6 +17,18 @@ def duration_to_minutes(duration_str):
             total_minutes += minutes
     return total_minutes
 
+def search_movies(request):
+    search_query = request.GET.get('search', '')
+    movies = Movie.objects.all()
+
+    if search_query:
+        movies = movies.filter(title__icontains=search_query)
+
+    return render(request, 'movies/movie_search_results.html', {
+        'movies': movies,
+        'search_query': search_query,
+    })
+
 def movie_list(request):
     movies = Movie.objects.all().order_by('-year')
 

@@ -8,4 +8,5 @@ urlpatterns = [
     path('update/<int:pk>/', views.update_movie, name='update_movie'),
     path('delete/<int:pk>/', views.delete_movie, name='delete_movie'),
     path('toggle_watched/<int:pk>/', views.toggle_watched, name='toggle_watched'),
+    path('search/', views.search_movies, name='search_movies'),
 ]

@@ -22,6 +22,21 @@
       <a href="{% url 'add_movie' %}" style="flex: none; margin-right: 15px"
         >Add Movie</a
       >
+      <label for="search" style="margin-right: 5px">Search: </label>
+      <form
+        method="get"
+        action="{% url 'search_movies' %}"
+        style="display: inline"
+      >
+        <input
+          type="text"
+          id="search"
+          name="search"
+          placeholder="Search by title..."
+          style="height: 15px"
+        />
+        <button type="submit" style="height: 20px">Search</button>
+      </form>
     </nav>
 
     {% block content %} {% endblock content %}

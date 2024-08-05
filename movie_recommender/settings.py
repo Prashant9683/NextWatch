@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv
+import environ
 import dj_database_url
-load_dotenv()
+env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -30,7 +30,6 @@ DEBUG = True
 ALLOWED_HOSTS = ["web-production-24d6.up.railway.app", "127.0.0.1", "nextwatch-mevm.onrender.com"]
 CSRF_TRUSTED_ORIGINS = ['https://web-production-24d6.up.railway.app', 'https://127.0.0.1', "https://nextwatch-mevm.onrender.com"]
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -80,8 +79,19 @@ WSGI_APPLICATION = "movie_recommender.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'movie_rec',
+#         'USER': 'postgres',
+#         'PASSWORD': '200256',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+DATABASE_URL = 'postgresql://movie_rec_user:iLFzxvdsX72WOIrePu6WftIRYq1gdOdO@dpg-cqoeceaj1k6c73b3rjpg-a.oregon-postgres.render.com/movie_rec'
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': dj_database_url.config(default=DATABASE_URL),
 }
 
 # DATABASES = {
