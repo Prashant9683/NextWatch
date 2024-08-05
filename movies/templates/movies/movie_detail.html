@@ -1,15 +1,24 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-<div
-  class="movie-detail"
-  style="background-image: url('{{ movie.poster_url }}');"
->
-  <div class="movie-info-overlay">
-    <h1>{{ movie.title }}</h1>
-    <p>
-      IMDB {{ movie.imdb_rating }}/10 • {{ movie.year }} • {{ movie.genre }} •
-      {{ movie.duration }}
-    </p>
-    <p>{{ movie.plot_description }}</p>
+<div class="movie-detail">
+  <div class="movie-info-overlay" style="background-color: white; color: black">
+    <div class="faltu-div" style="display: flex">
+      <div class="movie-detailed_infoo">
+        <h1>{{ movie.title }}</h1>
+        <p>
+          IMDB {{ movie.imdb_rating }}/10 • {{ movie.year }} • {{ movie.genre }}
+          • {{ movie.duration }}
+        </p>
+        <p>{{ movie.plot_description }}</p>
+      </div>
+      <div class="movie-poster_infoo">
+        <img
+          src="{{ movie.poster_url }}"
+          alt="{{ movie.title }}"
+          class="movie-poster"
+          style="width: 220px; height: 327px"
+        />
+      </div>
+    </div>
     {% if movie.trailer_url %}
     <div
       class="video-container"
