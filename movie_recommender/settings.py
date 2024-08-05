@@ -27,8 +27,8 @@ SECRET_KEY = "django-insecure-4s(=@q9f!p13yun!p$2_v6=7lc2lg_nxr+vwil4737-3en3$2v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["web-production-24d6.up.railway.app", "127.0.0.1"]
-CSRF_TRUSTED_ORIGINS = ['https://web-production-24d6.up.railway.app', 'https://127.0.0.1']
+ALLOWED_HOSTS = ["web-production-24d6.up.railway.app", "127.0.0.1", "nextwatch-mevm.onrender.com"]
+CSRF_TRUSTED_ORIGINS = ['https://web-production-24d6.up.railway.app', 'https://127.0.0.1', "https://nextwatch-mevm.onrender.com"]
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 # Application definition
