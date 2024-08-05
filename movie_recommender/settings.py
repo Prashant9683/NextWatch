@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
+import environ
+import dj_database_url
+env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,8 +27,9 @@ SECRET_KEY = "django-insecure-4s(=@q9f!p13yun!p$2_v6=7lc2lg_nxr+vwil4737-3en3$2v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["web-production-24d6.up.railway.app", "127.0.0.1"]
+CSRF_TRUSTED_ORIGINS = ['https://web-production-24d6.up.railway.app/', 'https://127.0.0.1']
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 # Application definition
 
@@ -88,6 +91,15 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+# 'default': dj_database_url.config(default='postgresql://postgres:wbQrjbetQyBzrcvicsPmuMYlKjPpPuPg@postgres.railway.internal:5432/railway',conn_max_age=1800)
+# }
+
+# ENVIRONMENT = env('ENVIRONMENT', default='development')
+
+# POSTGRES_LOCALLY = True
+# if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == True:
+#     DATABASES['default'] = dj_database_url.parse('postgresql://postgres:wbQrjbetQyBzrcvicsPmuMYlKjPpPuPg@postgres.railway.internal:5432/railway')
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
