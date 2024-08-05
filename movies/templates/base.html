@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Recommender</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body style="background-color: white">
+    <nav
+      style="
+        background-color: white;
+        height: 40px;
+        display: flex;
+        flex-direction: row;
+      "
+    >
+      <a href="{% url 'movie_list' %}" style="flex: none; margin-right: 15px"
+        >Home</a
+      >
+      <a href="{% url 'add_movie' %}" style="flex: none; margin-right: 15px"
+        >Add Movie</a
+      >
+    </nav>
+
+    {% block content %} {% endblock content %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(".toggle-watched").click(function () {
+          var button = $(this);
+          var movieId = button.data("movie-id");
+          $.ajax({
+            url: "/toggle_watched/" + movieId + "/",
+            type: "GET",
+            success: function (response) {
+              if (response.watched) {
+                button.text("Watched");
+              } else {
+                button.text("Mark as Watched");
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("Error:", error);
+            },
+          });
+        });
+      });
+    </script>
+
+    {% block scripts %} {% endblock scripts %}
+  </body>
+</html>

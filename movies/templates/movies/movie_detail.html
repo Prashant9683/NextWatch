@@ -1,0 +1,55 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div
+  class="movie-detail"
+  style="background-image: url('{{ movie.poster_url }}');"
+>
+  <div class="movie-info-overlay">
+    <h1>{{ movie.title }}</h1>
+    <p>
+      IMDB {{ movie.imdb_rating }}/10 • {{ movie.year }} • {{ movie.genre }} •
+      {{ movie.duration }}
+    </p>
+    <p>{{ movie.plot_description }}</p>
+    {% if movie.trailer_url %}
+    <div class="video-container">
+      <iframe
+        width="560"
+        height="315"
+        src="{{ movie.trailer_url }}"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
+    </div>
+    {% endif %}
+
+    <h3>Streaming Platforms:</h3>
+    <p>
+      {{ movie.ott_platforms }} {% if movie.ott_platforms != "NONE" %} -
+      <a href="{{ movie.movie_url }}" target="_blank" class="btn">Watch Now</a>
+      {% endif %}
+    </p>
+
+    <div class="movie-actions">
+      <a href="{% url 'update_movie' movie.pk %}" class="btn">Update</a>
+      <a href="{% url 'delete_movie' movie.pk %}" class="btn">Delete</a>
+      {% comment %}
+      <button class="btn toggle-watched" data-movie-id="{{ movie.pk }}">
+        {% if movie.watched %}Watched{% else %}Mark as Watched{% endif %}
+      </button>
+      {% endcomment %}
+      <a href="{% url 'toggle_watched' movie.pk %}" class="btn"
+        >{% if movie.watched %}Watched{% else %}Mark as Watched{% endif %}</a
+      >
+      <a
+        href="https://www.google.com/search?q={{ movie.title }} movie {{ movie.year }}"
+        target="_blank"
+        class="btn"
+        >G Search</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock content %}
