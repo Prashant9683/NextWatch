@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 <h1>Add Movie</h1>
-<form method="post">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Add Movie</button>
+<form method="get" action="{% url 'add_movie' %}">
+  <input type="text" name="search" placeholder="Search for a movie..." />
+  <button type="submit">Search</button>
 </form>
 {% endblock %}

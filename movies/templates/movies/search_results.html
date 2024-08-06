@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Search Results</h1>
+<ul>
+  {% for result in results %}
+  <li>
+    {{ result.title }} ({{ result.release_date|slice:":4" }})
+    <form method="post" action="{% url 'add_movie' %}">
+      {% csrf_token %}
+      <input type="hidden" name="tmdb_id" value="{{ result.id }}" />
+      <button type="submit">Add to Library</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

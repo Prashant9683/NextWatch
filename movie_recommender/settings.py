@@ -84,18 +84,6 @@ DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
-# DATABASES = {
-# 'default': dj_database_url.config(default='postgresql://postgres:wbQrjbetQyBzrcvicsPmuMYlKjPpPuPg@postgres.railway.internal:5432/railway',conn_max_age=1800)
-# }
-
-# ENVIRONMENT = env('ENVIRONMENT', default='development')
-
-# POSTGRES_LOCALLY = True
-# if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == True:
-#     DATABASES['default'] = dj_database_url.parse('postgresql://postgres:wbQrjbetQyBzrcvicsPmuMYlKjPpPuPg@postgres.railway.internal:5432/railway')
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -140,3 +128,4 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage' 
+TMDB_API_KEY = os.getenv('TMDB_API_KEY')

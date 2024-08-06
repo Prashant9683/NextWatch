@@ -3,6 +3,8 @@ from django.http import JsonResponse, HttpResponse
 from .models import Movie
 from .forms import MovieForm
 from django.db.models import Q
+from .tmdb_utils import search_tmdb_movies, get_tmdb_movie_details
+from .tmdb_api import get_tmdb_movie_providers
 
 
 def duration_to_minutes(duration_str):
@@ -74,15 +76,58 @@ def movie_detail(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     return render(request, 'movies/movie_detail.html', {'movie': movie})
 
+# def add_movie(request):
+#     if request.method == 'POST':
+#         form = MovieForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('movie_list')
+#     else:
+#         form = MovieForm()
+#     return render(request, 'movies/add_movie.html', {'form': form})
+
+
 def add_movie(request):
     if request.method == 'POST':
-        form = MovieForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('movie_list')
+        tmdb_id = request.POST.get('tmdb_id')
+        if tmdb_id:
+            try:
+                movie_details = get_tmdb_movie_details(tmdb_id)
+                
+                # Convert runtime (in minutes) to hours and minutes
+                runtime_minutes = movie_details.runtime or 0
+                hours, minutes = divmod(runtime_minutes, 60)
+                duration = f"{hours}h {minutes}m"
+                
+                # Fetch streaming providers
+                providers = get_tmdb_movie_providers(tmdb_id)
+                ott_platforms = ', '.join(providers) if providers else 'NONE'
+
+                movie = Movie(
+                    tmdb_id=movie_details.id,
+                    title=movie_details.title,
+                    year=int(movie_details.release_date[:4]) if movie_details.release_date else 0,
+                    imdb_rating=round(movie_details.vote_average, 1),  # Rounding to 1 decimal place
+                    plot_description=movie_details.overview,
+                    genre=', '.join([genre['name'] for genre in movie_details.genres]),
+                    poster_url=f"https://image.tmdb.org/t/p/w500{movie_details.poster_path}" if movie_details.poster_path else None,
+                    duration=duration,  # Adding the duration field
+                    ott_platforms=ott_platforms,  # Adding the OTT platforms field
+                )
+                movie.save()
+                return redirect('movie_list')
+            except Exception as e:
+                # Handle API errors or other exceptions
+                return render(request, 'movies/add_movie.html', {'error': str(e)})
+        else:
+            # Handle case where no TMDB ID is provided
+            return render(request, 'movies/add_movie.html', {'error': 'No TMDB ID provided'})
     else:
-        form = MovieForm()
-    return render(request, 'movies/add_movie.html', {'form': form})
+        search_query = request.GET.get('search', '')
+        if search_query:
+            search_results = search_tmdb_movies(search_query)
+            return render(request, 'movies/search_results.html', {'results': search_results})
+    return render(request, 'movies/add_movie.html')
 
 def update_movie(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
