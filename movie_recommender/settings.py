@@ -84,6 +84,16 @@ DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'movie_rec',
+#         'USER': 'postgres',
+#         'PASSWORD': '200256',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
