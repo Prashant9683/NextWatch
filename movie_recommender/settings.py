@@ -138,4 +138,4 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage' 
-TMDB_API_KEY = os.getenv('TMDB_API_KEY')
+TMDB_API_KEY = '70cce32721be5080b489af4df1817bab'

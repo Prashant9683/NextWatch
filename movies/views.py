@@ -5,6 +5,7 @@ from .forms import MovieForm
 from django.db.models import Q
 from .tmdb_utils import search_tmdb_movies, get_tmdb_movie_details
 from .tmdb_api import get_tmdb_movie_providers
+import requests
 
 
 def duration_to_minutes(duration_str):
@@ -87,6 +88,19 @@ def movie_detail(request, pk):
 #     return render(request, 'movies/add_movie.html', {'form': form})
 
 
+def get_trailer_url(tmdb_id):
+    url = f'https://api.themoviedb.org/3/movie/{tmdb_id}?api_key=70cce32721be5080b489af4df1817bab&append_to_response=videos'
+    response = requests.get(url)
+    data = response.json()
+    
+    # Find the YouTube trailer
+    for video in data.get('videos', {}).get('results', []):
+        if video['type'] == 'Trailer' and video['site'] == 'YouTube':
+            print(f"Found trailer for movie {tmdb_id} which is: {video['key']}")
+            return f"https://www.youtube.com/embed/{video['key']}"
+    
+    return None  # Return None if no trailer is found
+
 def add_movie(request):
     if request.method == 'POST':
         tmdb_id = request.POST.get('tmdb_id')
@@ -102,17 +116,21 @@ def add_movie(request):
                 # Fetch streaming providers
                 providers = get_tmdb_movie_providers(tmdb_id)
                 ott_platforms = ', '.join(providers) if providers else 'NONE'
+                
+                # Fetch trailer URL
+                trailer_url = get_trailer_url(tmdb_id)
 
                 movie = Movie(
-                    tmdb_id=movie_details.id,
-                    title=movie_details.title,
-                    year=int(movie_details.release_date[:4]) if movie_details.release_date else 0,
-                    imdb_rating=round(movie_details.vote_average, 1),  # Rounding to 1 decimal place
-                    plot_description=movie_details.overview,
-                    genre=', '.join([genre['name'] for genre in movie_details.genres]),
-                    poster_url=f"https://image.tmdb.org/t/p/w500{movie_details.poster_path}" if movie_details.poster_path else None,
+                    tmdb_id=movie_details['id'],
+                    title=movie_details['title'],
+                    year=int(movie_details['release_date'][:4]) if 'release_date' in movie_details else 0,
+                    imdb_rating=round(movie_details['vote_average'], 1),  # Rounding to 1 decimal place
+                    plot_description=movie_details['overview'],
+                    genre=', '.join([genre['name'] for genre in movie_details['genres']]),
+                    poster_url=f"https://image.tmdb.org/t/p/w500{movie_details['poster_path']}" if 'poster_path' in movie_details else None,
                     duration=duration,  # Adding the duration field
                     ott_platforms=ott_platforms,  # Adding the OTT platforms field
+                    trailer_url=trailer_url,  # Adding the trailer URL field
                 )
                 movie.save()
                 return redirect('movie_list')
